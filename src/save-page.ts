@@ -1,6 +1,5 @@
 /**
  * TODO:
- * * fix downloading images and other files. They stopped downloading when i set requestOptions.encoding: null (which fixed incomplete responses for binary data on the other hand)
  * * scraper should handle redirects - it should modify url of resources accordingly
  */
 

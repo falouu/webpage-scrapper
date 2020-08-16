@@ -84,6 +84,10 @@ export default class MyPuppeteerPlugin {
             } else {
                 const contentLength = response.headers['content-length'] || 0
                 const bodyLength = response.body.length
+
+                const bodyAsBuffer = response.body
+                const bodyAsStringBinary = Buffer.from(bodyAsBuffer).toString('binary')
+
                 log("This is not a html.", {
                     bytes: bodyLength, 
                     contentLength: contentLength, 
@@ -96,7 +100,7 @@ export default class MyPuppeteerPlugin {
                     log(`WARNING: content-length and actual response length differs! ${contentLength} vs ${bodyLength}`)
                 }
 
-                return response.body;
+                return bodyAsStringBinary;
             }
         });
 
