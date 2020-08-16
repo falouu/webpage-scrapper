@@ -1,23 +1,20 @@
 import puppeteer, { Browser, LaunchOptions } from 'puppeteer';
 import debug from 'debug';
-import { RequestOptions } from 'website-scraper';
-import { Headers } from 'request'
-import { IncomingMessage } from 'http';
+import 'website-scraper';
+import request from 'request'
+import websiteScraper from 'website-scraper';
 
 const log = debug("pupp-plugin")
 
 
-type RegisterAction = (k: string, cb: (y: any) => any) => undefined
+type RegisterAction = (k: string, cb: (...y: any) => any) => undefined
 
-
-interface Request {
-    href: string,
-    method: string
+interface Resource {
+    getUrl(): string
 }
 
-interface Response extends IncomingMessage {
-    request: Request,
-    body: any
+interface RequestOptions extends websiteScraper.RequestOptions {
+    encoding: string | null 
 }
 
 interface ScrollToBottom {
@@ -30,7 +27,7 @@ export default class MyPuppeteerPlugin {
     readonly launchOptions: LaunchOptions;
     browser?: Browser
     readonly scrollToBottom?: ScrollToBottom
-    headers: Headers
+    headers: request.Headers
 
     constructor(args: {
         launchOptions?: LaunchOptions,
@@ -49,14 +46,15 @@ export default class MyPuppeteerPlugin {
             this.browser = await puppeteer.launch(this.launchOptions);
         });
 
-        registerAction('beforeRequest', async (requestOptions: RequestOptions) => {
+        registerAction('beforeRequest', async ({resource,requestOptions}:{resource: Resource, requestOptions: RequestOptions}) => {
             if (hasValues(requestOptions.headers)) {
                 this.headers = Object.assign({}, requestOptions.headers);
             }
+            requestOptions.encoding = null
             return {requestOptions};
         });
 
-        registerAction('afterResponse', async ({response}:{response: Response}) => {
+        registerAction('afterResponse', async ({response}:{response: request.Response}) => {
 
             log("Received afterResponse with response:", {'request line': `${response.request.method} ${response.request.href}`, statusCode: response.statusCode})
 
@@ -84,6 +82,20 @@ export default class MyPuppeteerPlugin {
                 // convert utf-8 -> binary string because website-scraper needs binary
                 return Buffer.from(content).toString('binary');
             } else {
+                const contentLength = response.headers['content-length'] || 0
+                const bodyLength = response.body.length
+                log("This is not a html.", {
+                    bytes: bodyLength, 
+                    contentLength: contentLength, 
+                    transferEncoding: response.headers['transfer-encoding'], 
+                    contentEncoding: response.headers['content-encoding'],
+                    contentType: response.headers['content-type'],
+                    httpVersion: response.httpVersion,
+                    complete: response.complete})
+                if (bodyLength != contentLength) {
+                    log(`WARNING: content-length and actual response length differs! ${contentLength} vs ${bodyLength}`)
+                }
+
                 return response.body;
             }
         });
