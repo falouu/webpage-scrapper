@@ -1,5 +1,5 @@
 import scrape from 'website-scraper';
-import PuppeteerPlugin from 'website-scraper-puppeteer';
+import MyPuppeteerPlugin from './puppeteer/scraper-puppeteer-plugin';
 import path from 'path';
 import yargs from 'yargs'
 
@@ -16,10 +16,11 @@ scrape({
     urls: [url],
     directory: path.join(outputDir, hostname),
     plugins: [ 
-      new PuppeteerPlugin({
-        launchOptions: { headless: false }, /* optional */
-        scrollToBottom: { timeout: 10000, viewportN: 10 }, /* optional */
-        blockNavigation: true, /* optional */
+
+      new MyPuppeteerPlugin({
+        launchOptions: {headless: false},
+        scrollToBottom: { timeout: 10000, viewportN: 10 }, 
+        //blockNavigation: false, /* TODO: check */
       })
     ]
 });
