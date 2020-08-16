@@ -1,0 +1,24 @@
+{
+  "name": "webpage-scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "website-scraper": "^4.2.2",
+    "website-scraper-puppeteer": "^0.1.5",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "@types/website-scraper": "^1.2.5",
+    "@types/yargs": "^15.0.5",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "start": "node target/src/save-page.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
