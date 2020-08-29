@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "website-scraper": "^4.2.2",
+    "website-scraper": "github:falouu/node-website-scraper#76a711a257aefb6c6b303a6d655ae66e8a799395",
     "website-scraper-puppeteer": "^0.1.5",
     "yargs": "^15.4.1"
   },

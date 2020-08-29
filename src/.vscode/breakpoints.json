@@ -1,0 +1,75 @@
+[
+  {
+    "location": "/puppeteer/scraper-puppeteer-plugin.ts",
+    "line": [
+      {
+        "line": 49,
+        "character": 0
+      },
+      {
+        "line": 49,
+        "character": 0
+      }
+    ],
+    "enabled": false,
+    "condition": "resource.getUrl() == \"https://google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png\""
+  },
+  {
+    "location": "/puppeteer/scraper-puppeteer-plugin.ts",
+    "line": [
+      {
+        "line": 58,
+        "character": 12
+      },
+      {
+        "line": 58,
+        "character": 12
+      }
+    ],
+    "enabled": false,
+    "condition": "response.request.href == \"https://google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png\""
+  },
+  {
+    "location": "/node_modules/website-scraper/lib/scraper.js",
+    "line": [
+      {
+        "line": 147,
+        "character": 25
+      },
+      {
+        "line": 147,
+        "character": 25
+      }
+    ],
+    "enabled": true,
+    "condition": "resource.getUrl() == \"https://google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png\""
+  },
+  {
+    "location": "/node_modules/website-scraper/lib/scraper.js",
+    "line": [
+      {
+        "line": 164,
+        "character": 0
+      },
+      {
+        "line": 164,
+        "character": 0
+      }
+    ],
+    "enabled": true
+  },
+  {
+    "location": "/node_modules/website-scraper/lib/scraper.js",
+    "line": [
+      {
+        "line": 174,
+        "character": 0
+      },
+      {
+        "line": 174,
+        "character": 0
+      }
+    ],
+    "enabled": true
+  }
+]

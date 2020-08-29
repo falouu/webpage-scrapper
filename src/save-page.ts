@@ -1,6 +1,6 @@
 /**
  * TODO:
- * * scraper should handle redirects - it should modify url of resources accordingly
+ * * scraper should handle redirects from puppeteer - it should modify url of resources accordingly
  */
 
 import scrape from 'website-scraper';
@@ -21,7 +21,6 @@ scrape({
     urls: [url],
     directory: path.join(outputDir, hostname),
     plugins: [ 
-
       new MyPuppeteerPlugin({
         launchOptions: {headless: false},
         scrollToBottom: { timeout: 10000, viewportN: 10 }, 
