@@ -2,6 +2,7 @@
  * TODO:
  * * scraper should handle redirects from puppeteer - it should modify url of resources accordingly
  * * compress result binary
+ *   * use UPX, it compress binary to 33% size: https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
  * * maybe switch to other implementation of packer: https://tech.townsourced.com/post/embedding-static-files-in-go/#reproducible-builds
  */
 
