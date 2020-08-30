@@ -28,6 +28,6 @@ for site in "${workDir}/site/"*; do
     mv "${workDir}/site/${site}" "${workDir}/content" || die "cannot mv"
     cd "${workDir}/go" || die "cannot cd"
     packr2
-    go build -ldflags="-extldflags=-static" -o "../result/${site}"
+    go build -ldflags="-s -w -extldflags=-static" -o "../result/${site}"
 done
 

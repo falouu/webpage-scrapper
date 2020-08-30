@@ -1,6 +1,8 @@
 /**
  * TODO:
  * * scraper should handle redirects from puppeteer - it should modify url of resources accordingly
+ * * compress result binary
+ * * maybe switch to other implementation of packer: https://tech.townsourced.com/post/embedding-static-files-in-go/#reproducible-builds
  */
 
 import scrape from 'website-scraper';
