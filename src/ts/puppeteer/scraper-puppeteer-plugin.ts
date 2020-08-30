@@ -31,11 +31,11 @@ export default class MyPuppeteerPlugin {
 
     constructor(args: {
         launchOptions?: LaunchOptions,
-        scrollToBottom?: ScrollToBottom
+        scrollToBottom?: ScrollToBottom | false
         //blockNavigation = false
     }) {
         this.launchOptions = args.launchOptions || {};
-        this.scrollToBottom = args.scrollToBottom;
+        this.scrollToBottom = args.scrollToBottom || undefined;
         this.headers = {};
         
         log('init plugin', {launchOptions: this.launchOptions, scrollToBottom: this.scrollToBottom});
@@ -75,6 +75,58 @@ export default class MyPuppeteerPlugin {
                 if (this.scrollToBottom) {
                     await scrollToBottom(page, this.scrollToBottom.timeout, this.scrollToBottom.viewportN);
                 }
+
+                await page.evaluate(() => {
+                    let b = document.createElement('button')
+                    b.innerHTML = 'SCRAP';
+                    b.id = 'scraper-puppeteer-plugin-scrap-button'
+
+                    b.style.position = 'fixed';
+                    b.style.bottom = '5px';
+                    b.style.left = '5px';
+                    b.style.backgroundColor = '#3b4045';
+                    b.style.color = 'white';
+                    b.style.zIndex = '999999';
+
+                    document.body.appendChild(b);
+
+                    b.addEventListener('click', function(event) {
+                        this.classList.add('scrap-now');
+                    });
+                })
+
+                await page.waitForSelector('#scraper-puppeteer-plugin-scrap-button.scrap-now');
+
+                await page.evaluate(() => {
+                    document.getElementById('scraper-puppeteer-plugin-scrap-button')?.remove();
+                });
+
+                //const cookies = await page.cookies();
+
+                // for (const c of cookies) {
+                //     await page
+                // }
+
+                //page.addScriptTag({})
+
+
+                await page.evaluate(() => {
+
+
+
+                    
+                    const sc = document.createElement('script');
+                    sc.type = 'text/javascript';
+
+                    let text = '';
+
+                    // for (const c of cookies) {
+                    //     text += 'document.cookie += "' + c + '";\n';
+                    // }
+
+                    sc.text = text;
+                    document.head.prepend(sc);
+                });
 
                 const content = await page.content();
                 await page.close();
