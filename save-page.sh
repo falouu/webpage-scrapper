@@ -19,6 +19,7 @@ pushd "${SCRIPTDIR}" >/dev/null
     source "src/target/env.sh"
     ( cd "src" && npm start --silent -- --outputDir "${siteDir}" "$@" )
     #echo "NPM exit code: $?"
+    if [[ $? != 0 ]]; then exit $?; fi
 
     ./src/package-site.sh "${workDir}"
 

@@ -12,10 +12,25 @@ import path from 'path';
 import yargs from 'yargs'
 import { exit } from 'process';
 
-const args = yargs.options({
-  "url": {required: true, type: "string", description: "webpage to save"},
-  "outputDir": {default: "", type: "string", description: "custom output directory for scraped files"}
-}).argv
+const argParser = yargs
+    .options({
+      "url": {required: true, type: "string", description: "webpage to save"},
+      "outputDir": {default: "", type: "string", description: "custom output directory for scraped files"}
+    })
+    .usage("Example: $0 --url google.pl\n It will create a single linux binary file in the current directory. When you run the file, it will start the webserwer and print the url which you can type in your webbrowser to access the local copy of the scrapped website")
+
+argParser.exit = (() => {
+      const exitFn = yargs.exit
+      return (code: number, err: Error) => {
+        if (code == 0) {
+          code = -1
+        }
+        return exitFn(code, err)
+      }
+    })()
+
+const args = argParser.argv
+
 const url = args.url;
 const outputDir = args.outputDir;
 
