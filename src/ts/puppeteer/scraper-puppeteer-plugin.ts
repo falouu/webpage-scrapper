@@ -1,10 +1,11 @@
-import puppeteer, { Browser, LaunchOptions } from 'puppeteer';
+import puppeteer, { Browser, LaunchOptions, JSONArray } from 'puppeteer';
 import debug from 'debug';
 import 'website-scraper';
 import request from 'request'
 import websiteScraper from 'website-scraper';
 
 const log = debug("pupp-plugin")
+const logCookies = debug("pupp-plugin:cookies")
 
 
 type RegisterAction = (k: string, cb: (...y: any) => any) => undefined
@@ -101,32 +102,29 @@ export default class MyPuppeteerPlugin {
                     document.getElementById('scraper-puppeteer-plugin-scrap-button')?.remove();
                 });
 
-                //const cookies = await page.cookies();
+                const cookies = (await page.cookies()).map(cookie => ({
+                    domain: cookie.domain,
+                    expires: cookie.expires,
+                    httpOnly: cookie.httpOnly,
+                    name: cookie.name,
+                    path: cookie.path,
+                    sameSite: cookie.sameSite,
+                    secure: cookie.secure,
+                    d: cookie.session,
+                    e: cookie.size,
+                    value: cookie.value
+                }));
 
-                // for (const c of cookies) {
-                //     await page
-                // }
+                await page.evaluate(cookies => {
 
-                //page.addScriptTag({})
-
-
-                await page.evaluate(() => {
-
-
-
-                    
                     const sc = document.createElement('script');
                     sc.type = 'text/javascript';
+                    sc.text = cookies
+                        .map((c: any) => 'document.cookie = "' + c.name + '=' + c.value + '"')
+                        .join("\n");
 
-                    let text = '';
-
-                    // for (const c of cookies) {
-                    //     text += 'document.cookie += "' + c + '";\n';
-                    // }
-
-                    sc.text = text;
                     document.head.prepend(sc);
-                });
+                }, cookies);
 
                 const content = await page.content();
                 await page.close();
