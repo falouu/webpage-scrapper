@@ -27,7 +27,21 @@ for site in "${workDir}/site/"*; do
     rm -rf "${workDir}/content"
     mv "${workDir}/site/${site}" "${workDir}/content" || die "cannot mv"
     cd "${workDir}/go" || die "cannot cd"
+
+    setsid go run main.go -open-browser=false &
+    serverPID=$!
+    trap "[[ -d '/proc/${serverPID}' ]] && kill -- -$serverPID" EXIT
+
+    ( cd "${SCRIPTDIR}" && npm run fixPage --silent -- --dir "${workDir}/content") || die "failed to fix page"
+
+
+    kill -- -$serverPID || die "cannot kill server"
+
+
     packr2
+
+
+
     go build -ldflags="-s -w -extldflags=-static" -o "../result/${site}"
 done
 

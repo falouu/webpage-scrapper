@@ -41,7 +41,7 @@ let result = scrape({
     directory: path.join(outputDir, hostname),
     plugins: [ 
       new MyPuppeteerPlugin({
-        launchOptions: {headless: false},
+        launchOptions: {headless: false, defaultViewport: null},
         scrollToBottom: false, 
         //blockNavigation: false, /* TODO: check */
       })

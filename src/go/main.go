@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"log"
@@ -10,8 +11,9 @@ import (
 )
 
 func main() {
-	//fmt.Println("hello GO")
 	port := "9876"
+	openBrowser := flag.Bool("open-browser", true, "Open default browser after launching the server")
+	flag.Parse()
 
 	box := packr.New("My Box", "../content")
 
@@ -24,10 +26,12 @@ func main() {
 	done := make(chan bool)
 	go serve(server, done)
 
-	cmd := exec.Command("xdg-open", "http://localhost:" + port)
-	err := cmd.Run()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+	if *openBrowser {
+		cmd := exec.Command("xdg-open", "http://localhost:" + port)
+		err := cmd.Run()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+		}
 	}
 	<-done
 }
