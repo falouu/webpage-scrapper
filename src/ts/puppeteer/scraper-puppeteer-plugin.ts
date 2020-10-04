@@ -96,7 +96,7 @@ export default class MyPuppeteerPlugin {
                     });
                 })
 
-                await page.waitForSelector('#scraper-puppeteer-plugin-scrap-button.scrap-now');
+                await page.waitForSelector('#scraper-puppeteer-plugin-scrap-button.scrap-now', {timeout: 0});
 
                 await page.evaluate(() => {
                     document.getElementById('scraper-puppeteer-plugin-scrap-button')?.remove();

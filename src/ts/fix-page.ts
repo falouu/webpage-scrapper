@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import puppeteer from 'puppeteer';
 import yargs from 'yargs';
+import { exit } from 'process';
 
 const argParser = yargs
     .options({
@@ -56,4 +57,8 @@ const args = argParser.argv;
 
     fs.writeFileSync(args.dir + "/index.html", buffer)
 })()
+.catch(reason => {
+    console.error(reason);
+    exit(2)
+});
 

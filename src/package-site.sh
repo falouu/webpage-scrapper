@@ -37,11 +37,18 @@ for site in "${workDir}/site/"*; do
 
     kill -- -$serverPID || die "cannot kill server"
 
-
     packr2
 
+    go build -ldflags="-s -w -extldflags=-static" -o "../result/${site}-raw"
+    go_build_status="$?"
+    if [[ "$go_build_status" == "0" ]]; then
+      "${UPX_BIN}" --brute "../result/${site}-raw" -o "../result/${site}"
+      upx_status="$?"
+    fi
+    rm "../result/${site}-raw"
 
-
-    go build -ldflags="-s -w -extldflags=-static" -o "../result/${site}"
+    if [[ "$go_build_status" != "0" ]]; then exit "$go_build_status"
+    elif [[ "$upx_status" != "0" ]]; then exit "$upx_status"
+    fi
 done
 
