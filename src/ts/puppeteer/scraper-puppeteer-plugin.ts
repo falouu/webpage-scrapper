@@ -29,15 +29,24 @@ export default class MyPuppeteerPlugin {
     browser?: Browser
     readonly scrollToBottom?: ScrollToBottom
     headers: request.Headers
+    pdfFile?: string
 
     constructor(args: {
         launchOptions?: LaunchOptions,
-        scrollToBottom?: ScrollToBottom | false
+        scrollToBottom?: ScrollToBottom | false,
+        /**
+         * WARNING: don't set, pdf is not working in Chrome non-headless mode. 
+         *   Generate pdf manually by clicking "Print" when after preparing site, before clicking "SCRAP" button.
+         * 
+         * if set, pdf of the page will be generated under specific directory
+         */
+        pdfOutputFile?: string | undefined
         //blockNavigation = false
     }) {
         this.launchOptions = args.launchOptions || {};
         this.scrollToBottom = args.scrollToBottom || undefined;
         this.headers = {};
+        this.pdfFile = args.pdfOutputFile;
         
         log('init plugin', {launchOptions: this.launchOptions, scrollToBottom: this.scrollToBottom});
     }
@@ -127,6 +136,14 @@ export default class MyPuppeteerPlugin {
                 }, cookies);
 
                 const content = await page.content();
+
+                // PDF is not working in non-headless Chrome mode
+                if (this.pdfFile !== undefined) {
+                    const pageHeight = await page.evaluate(() => { return window.innerHeight; });
+                    const pageWidth = await page.evaluate(() => { return window.innerWidth; });
+                    await page.pdf({path: this.pdfFile, printBackground: true, width: pageWidth, height: pageHeight});
+                }
+
                 await page.close();
 
                 // convert utf-8 -> binary string because website-scraper needs binary

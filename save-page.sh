@@ -13,6 +13,7 @@ workDir="$(mktemp -d)"
 trap "rm -rf ${workDir}" EXIT
 
 siteDir="${workDir}/site"
+# pdfDir="${workDir}/pdf"
 mkdir -p "${siteDir}"
 pushd "${SCRIPTDIR}" >/dev/null
     make -s compile
@@ -24,8 +25,12 @@ pushd "${SCRIPTDIR}" >/dev/null
     ./src/package-site.sh "${workDir}"
 
     for result in "${workDir}/result/"*; do
-        cp "${result}" "${outputDir}/"
         basres="$(basename "${result}")"
+
+        # cp "${pdfDir}/${basres}.pdf" "${outputDir}/"
+        # echo "PDF saved to: ${pdfDir}/${basres}.pdf"
+
+        cp "${result}" "${outputDir}/"
         echo "Result saved to: ${outputDir}/${basres}"
         echo "Run it by simply: ./${basres}"
     done 
