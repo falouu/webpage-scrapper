@@ -53,5 +53,7 @@ let result = scrape({
 
 result.catch(reason => {
   console.error(reason);
+  console.error("> stacktrace:");
+  console.error(reason.stack)
   exit(2)
 });
